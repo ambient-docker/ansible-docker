@@ -1,0 +1,26 @@
+---
+- hosts: server
+  become: yes
+  tasks:
+    - name: change timedatectl
+      shell: "timedatectl set-timezone 'Europe/Paris'"
+    - name: ensure the lsof package is installed
+      yum:
+        name: lsof
+        state: present
+    - name: Create a data container
+      docker_container:
+        name: mydata
+        image: busybox
+        volumes:
+          - /data
+    - name: Create portainer
+      docker_container:
+        name: dockerweb
+        image: portainer/portainer
+        command: "-H  unix:///var/run/docker.sock"
+        state: started
+        volumes:
+          - "/var/run/docker.sock:/var/run/docker.sock"
+        ports:
+          - "9000:9000"
