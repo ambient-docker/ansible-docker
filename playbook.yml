@@ -4,6 +4,16 @@
   tasks:
     - name: change timedatectl
       shell: "timedatectl set-timezone 'Europe/Paris'"
+    - name: install python3
+      yum:
+        name: python36
+        state: present
+    - name: install python36-pip
+      yum:
+        name: python36-pip
+        state: present
+    - name: change timedatectl
+      shell: "python36 -m pip install virtualenv"
     - name: ensure the lsof package is installed
       yum:
         name: lsof
